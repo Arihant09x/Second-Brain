@@ -1,6 +1,6 @@
 # Second Brain App
 
-![Project Screenshot](Screenshot 2025-02-11 133012.png)
+
 
 ## Overview
 
