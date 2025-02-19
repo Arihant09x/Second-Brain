@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.env = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 exports.env = {
-    MONGO_URI: process.env.MONGO_URI ||
-        "mongodb+srv://arihant:dYaCU49olltP8XLD@cluster0.6dbws.mongodb.net/second-brain-app",
-    JWT_SECRET: process.env.JWT_SECRET || "arihant123",
+    MONGO_URI: process.env.MONGO_URI || "",
+    JWT_SECRET: process.env.JWT_SECRET || "",
 };

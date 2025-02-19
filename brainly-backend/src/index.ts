@@ -1,6 +1,15 @@
 import dotenv from "dotenv";
-dotenv.config();
+import path from "path";
+
+// Load .env from root directory
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+console.log(
+  "Loading environment variables from:",
+  path.resolve(__dirname, "../.env")
+);
+
 import { env } from "./environment";
+
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import { ContentModel, LinkModel, LinksModel, UserModel } from "./db";
@@ -15,6 +24,9 @@ import { random } from "./utils";
 const mongoUri = env.MONGO_URI!;
 const JWT_SECRET = env.JWT_SECRET!;
 if (!mongoUri || !JWT_SECRET) {
+  console.error("Environment variables not loaded correctly");
+  console.error("MONGO_URI:", mongoUri ? "***" : "MISSING");
+  console.error("JWT_SECRET:", JWT_SECRET ? "***" : "MISSING");
   throw new Error(
     "Environment variables MONGO_URI and JWT_SECRET are required."
   );
@@ -306,7 +318,6 @@ app.get("/api/v1/brain/:shareLink", async (req: Request, res: Response) => {
     res.status(500).json({ msg: "An unexpected server error occurred" });
   }
 });
-// MongoDB Connection
 const connectDB = async () => {
   try {
     await mongoose.connect(mongoUri);

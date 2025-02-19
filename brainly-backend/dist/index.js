@@ -13,8 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+const path_1 = __importDefault(require("path"));
+// Load .env from root directory
+dotenv_1.default.config({ path: path_1.default.resolve(__dirname, "../.env") });
+// console.log(
+//   "Loading environment variables from:",
+//   path.resolve(__dirname, "../.env")
+// );
 const environment_1 = require("./environment");
+// console.log("Environment variables:", {
+//   MONGO_URI: env.MONGO_URI ? "***" : "MISSING",
+//   JWT_SECRET: env.JWT_SECRET ? "***" : "MISSING",
+// });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const db_1 = require("./db");
@@ -28,6 +38,9 @@ const utils_1 = require("./utils");
 const mongoUri = environment_1.env.MONGO_URI;
 const JWT_SECRET = environment_1.env.JWT_SECRET;
 if (!mongoUri || !JWT_SECRET) {
+    console.error("Environment variables not loaded correctly");
+    console.error("MONGO_URI:", mongoUri ? "***" : "MISSING");
+    console.error("JWT_SECRET:", JWT_SECRET ? "***" : "MISSING");
     throw new Error("Environment variables MONGO_URI and JWT_SECRET are required.");
 }
 // App Setup
@@ -274,7 +287,6 @@ app.get("/api/v1/brain/:shareLink", (req, res) => __awaiter(void 0, void 0, void
         res.status(500).json({ msg: "An unexpected server error occurred" });
     }
 }));
-// MongoDB Connection
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose_1.default.connect(mongoUri);
