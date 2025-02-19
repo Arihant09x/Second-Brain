@@ -16,15 +16,8 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 // Load .env from root directory
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, "../.env") });
-// console.log(
-//   "Loading environment variables from:",
-//   path.resolve(__dirname, "../.env")
-// );
+console.log("Loading environment variables from:", path_1.default.resolve(__dirname, "../.env"));
 const environment_1 = require("./environment");
-// console.log("Environment variables:", {
-//   MONGO_URI: env.MONGO_URI ? "***" : "MISSING",
-//   JWT_SECRET: env.JWT_SECRET ? "***" : "MISSING",
-// });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const db_1 = require("./db");
