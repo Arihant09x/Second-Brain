@@ -6,6 +6,7 @@ interface InputOnchange {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isValid?: boolean | null;
+  className?: string;
 }
 
 export function Input({

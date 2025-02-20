@@ -1,6 +1,5 @@
 import axios from "axios";
 import { DeleteIcon } from "./Icons/DeleteIcon";
-import { DocumentIcon } from "./Icons/Document";
 import { ShareICon } from "./Icons/ShareIcon";
 import { useEffect, useState } from "react";
 import { useContent } from "../hooks/useContent";
@@ -21,26 +20,25 @@ interface CardInterface {
 }
 
 export function Cards(props: CardInterface) {
-  const { content, refesh } = useContent();
+  const { content } = useContent();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [TrueOrFalse, setValue] = useState(false);
 
   useEffect(() => {
-    // Ensure Twitter script reloads when the component mounts
-    if ((window as any).twttr) {
-      (window as any).twttr.widgets.load();
+    if (window.twttr) {
+      window.twttr.widgets.load();
     } else {
       const script = document.createElement("script");
       script.src = "https://platform.twitter.com/widgets.js";
       script.async = true;
       script.onload = () => {
-        if ((window as any).twttr) {
-          (window as any).twttr.widgets.load();
+        if (window.twttr) {
+          window.twttr.widgets.load();
         }
       };
       document.body.appendChild(script);
     }
-  }, [props.link]); // Reload when the link changes
+  }, [props.link]);
 
   async function Delete() {
     console.log("Data is" + content);
@@ -86,11 +84,7 @@ export function Cards(props: CardInterface) {
     <div className="p-4 bg-white rounded-md shadow-sm border-gray-200 max-w-80 border h-full">
       <div className="flex justify-between ">
         <div className="flex justify-center items-center gap-3 text-xl font-medium mr-2 text-[#848990]">
-          {props.type == "youtube" ? (
-            <YoutubeICon />
-          ) : (
-            <TwitterIcon /> || <DocumentIcon />
-          )}
+          {props.type == "youtube" ? <YoutubeICon /> : <TwitterIcon />}
           <span className="-mt-1"> {props.title}</span>
         </div>
         <div className="flex gap-2 text-[#848990] items-center">
@@ -155,4 +149,13 @@ export function Cards(props: CardInterface) {
       </div>
     </div>
   );
+}
+declare global {
+  interface Window {
+    twttr?: {
+      widgets: {
+        load: () => void;
+      };
+    };
+  }
 }

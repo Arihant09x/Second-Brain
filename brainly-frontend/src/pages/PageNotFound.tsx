@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BrainICon } from "../components/Icons/BrainIcon";
 import Button from "../components/Button";

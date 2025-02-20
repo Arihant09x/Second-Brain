@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { Sidebar } from "../components/Sidebar";
 import { useContent } from "../hooks/useContent";
 import CreateContent from "../components/ContentModal";
@@ -8,6 +7,7 @@ import { ShareICon } from "../components/Icons/ShareIcon";
 import { PlusIcon } from "../components/Icons/PlusIcon";
 import { ClipLoader } from "react-spinners";
 import { Cards } from "../components/Card";
+import { useEffect, useState } from "react";
 
 const Twitter = () => {
   const [ContentmodalOpen, setContentModalOpen] = useState(false);
@@ -22,7 +22,7 @@ const Twitter = () => {
     }, 1000);
   }, []);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = () => {
     refersh();
   };
 

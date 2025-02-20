@@ -25,14 +25,6 @@ export function Signin() {
   });
 
   const usernameSchema = z.string().min(3).max(10);
-  const passwordSchema = z
-    .string()
-    .min(8)
-    .max(20)
-    .regex(/[A-Z]/)
-    .regex(/[a-z]/)
-    .regex(/[0-9]/)
-    .regex(/[@$!%*?&#]/);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [TrueOrFalse, setValue] = useState(false);
@@ -87,10 +79,14 @@ export function Signin() {
         setValue(false);
       }
     } catch (error) {
-      setErrorMessage(" Sign-in failed. Please try again!");
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(
+          error.response?.data?.message || "Sign-in failed. Please try again!"
+        );
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again!");
+      }
       setValue(false);
-    } finally {
-      setLoading(false);
     }
   }
 

@@ -1,6 +1,5 @@
-import React, { ReactElement } from "react";
 import { ClipLoader } from "react-spinners";
-
+import { ReactElement } from "react";
 export interface ButtonProps {
   variant: "primary" | "secondary";
   size?: "sm" | "md" | "lg";
