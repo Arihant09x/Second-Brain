@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import LabelInput from "../components/LabelInput";
 import { SuccessIcon } from "../components/Icons/SuccessIcon";
 import { ErrorIcon } from "../components/Icons/ErrorIcon";
-import signupImage from "/src/assets/signup.svg";
+import signupImage from "../assets/Signup.svg";
 
 import { BACKEND_URL } from "../config";
 
