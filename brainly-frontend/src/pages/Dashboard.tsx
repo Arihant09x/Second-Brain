@@ -25,7 +25,7 @@ function Dashboard() {
     fetchData();
   }, []);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = () => {
     refersh();
   };
 

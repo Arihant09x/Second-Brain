@@ -13,7 +13,8 @@ import { env } from "./environment";
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import { ContentModel, LinkModel, LinksModel, UserModel } from "./db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
@@ -84,7 +85,8 @@ app.post("/api/v1/signup", async (req, res) => {
       res.status(400).json({ msg: "Username taken" });
       return;
     } else {
-      const hashpassword = await bcrypt.hash(password, 5);
+      const hashpassword = await bcrypt.hash(password, 10);
+
       await UserModel.create({ username: username, password: hashpassword });
       res.status(201).json({ msg: "User Created Successfully" });
       return;
@@ -110,6 +112,7 @@ app.post("/api/v1/signin", async (req, res) => {
       return;
     } else {
       const isMatcg = await bcrypt.compare(password, user.password);
+
       if (isMatcg) {
         const token = jwt.sign({ id: user._id }, JWT_SECRET);
         res.status(200).json({ msg: "Login Success", token });

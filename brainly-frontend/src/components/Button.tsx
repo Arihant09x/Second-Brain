@@ -28,7 +28,7 @@ const Button = (props: ButtonProps) => {
   return (
     <button
       className={`${variantStyle[props.variant]} ${Defaultstyle} ${
-        Defaultsize[props.size]
+        Defaultsize[props.size || "md"]
       } ${props.fullwidth ? " w-64 flex justify-center items-center" : ""}  
       ${props.loading ? "opacity-50 cursor-not-allowed" : "hover:cursor-pointer transition-all duration-200 ease-out hover:scale-105 hover:shadow-sm"}
       `}

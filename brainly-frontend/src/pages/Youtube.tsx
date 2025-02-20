@@ -22,7 +22,7 @@ const Youtube = () => {
     }, 1000);
   }, []);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = () => {
     refersh();
   };
 

@@ -45,6 +45,7 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
 
   const handleShareClick = (link: string) => {
     setMessage("Link is copied to clipboard");
+    console.log(shareMessage);
 
     // Copy message to clipboard
     navigator.clipboard.writeText(link).then(() => {
