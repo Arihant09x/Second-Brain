@@ -9,6 +9,7 @@ import LabelInput from "../components/LabelInput";
 import { SuccessIcon } from "../components/Icons/SuccessIcon";
 import { ErrorIcon } from "../components/Icons/ErrorIcon";
 import login from "../assets/Secure-login.svg";
+import { BACKEND_URL } from "../config";
 
 export function Signin() {
   const [isLoading, setLoading] = useState(false);
@@ -70,7 +71,7 @@ export function Signin() {
         return;
       }
 
-      const response = await axios.post("http://localhost:5000/api/v1/signin", {
+      const response = await axios.post(BACKEND_URL + "api/v1/signin", {
         username,
         password,
       });

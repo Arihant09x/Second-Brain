@@ -4,6 +4,7 @@ import { CrossIcon } from "./Icons/CrossIcon";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useContent } from "../hooks/useContent";
 import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 interface ShareType {
   Shareopen: boolean;
@@ -22,7 +23,7 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
   async function shareBrain() {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/brain/share",
+        BACKEND_URL + "api/v1/brain/share",
         { share: true },
         { headers: { Authorization: localStorage.getItem("token") } }
       );

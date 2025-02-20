@@ -6,6 +6,7 @@ import { ViewCards } from "../components/ViewCard";
 import { ClipLoader } from "react-spinners";
 import { BrainICon } from "../components/Icons/BrainIcon";
 import { LoginArrowIcon } from "../components/Icons/LoginArrow";
+import { BACKEND_URL } from "../config";
 
 export function UserDashBoard() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export function UserDashBoard() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/v1/brain/${shareLink}`
+        BACKEND_URL + `api/v1/brain/${shareLink}`
       );
       console.log("Fetched Content:", response.data.Content);
       setContent(response.data.Content);

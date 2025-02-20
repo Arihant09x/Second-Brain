@@ -8,6 +8,7 @@ import LabelInput from "../components/LabelInput";
 import { SuccessIcon } from "../components/Icons/SuccessIcon";
 import { ErrorIcon } from "../components/Icons/ErrorIcon";
 import secure from "../assets/signup.svg";
+import { BACKEND_URL } from "../config";
 
 export function Signup() {
   const [isLoading, setLoading] = useState(false);
@@ -64,13 +65,13 @@ export function Signup() {
     try {
       setLoading(true);
       if (!name || !username || !password) {
-        setErrorMessage("⚠️ All fields are required!");
+        setErrorMessage(" All fields are required!");
         setValue(false);
         setLoading(false);
         return;
       }
 
-      await axios.post("http://localhost:5000/api/v1/signup", {
+      await axios.post(BACKEND_URL + "api/v1/signup", {
         username,
         password,
       });
@@ -87,7 +88,7 @@ export function Signup() {
   }
 
   return (
-    <div className="h-screen w-screen bg-gray-900 flex">
+    <div className="h-screen w-screen bg-gray-200 flex">
       <div
         className="w-1/2 h-screen bg-cover bg-center"
         style={{

@@ -7,6 +7,7 @@ import Button from "../components/Button";
 import { Input } from "../components/Input";
 import { ClipLoader } from "react-spinners";
 import { DeleteIcon } from "../components/Icons/DeleteIcon";
+import { BACKEND_URL } from "../config";
 
 const LinkPage = () => {
   const [ContentmodalOpen, setContentModalOpen] = useState(false);
@@ -24,7 +25,7 @@ const LinkPage = () => {
 
   const fetchLinks = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/v1/links", {
+      const response = await axios.get(BACKEND_URL + "api/v1/links", {
         headers: {
           Authorization: ` ${localStorage.getItem("token")}`,
         },
@@ -51,7 +52,7 @@ const LinkPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/links",
+        BACKEND_URL + "api/v1/links",
         { title, url },
         {
           headers: {
@@ -77,7 +78,7 @@ const LinkPage = () => {
 
   const deleteLink = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/api/v1/links/${id}`, {
+      await axios.delete(BACKEND_URL + `api/v1/links/${id}`, {
         headers: {
           Authorization: ` ${localStorage.getItem("token")}`,
         },

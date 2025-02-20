@@ -8,6 +8,7 @@ import LabelInput from "./LabelInput";
 import { SuccessIcon } from "./Icons/SuccessIcon";
 import { ErrorIcon } from "./Icons/ErrorIcon";
 import { useRef, useState } from "react";
+import { BACKEND_URL } from "../config";
 
 interface CreateContentProps {
   open: boolean;
@@ -42,7 +43,7 @@ function CreateContent({ open, onClose }: CreateContentProps) {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/content",
+        BACKEND_URL + "api/v1/content",
         {
           title,
           subtitle,

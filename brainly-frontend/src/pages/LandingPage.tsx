@@ -9,12 +9,7 @@ import image3 from "../assets/image3.jpg";
 import image4 from "../assets/image4.jpg";
 import image5 from "../assets/image5.jpg";
 import image6 from "../assets/image6.jpg";
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
+import { FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 const LandingPage = () => {
   const navigate = useNavigate();
 

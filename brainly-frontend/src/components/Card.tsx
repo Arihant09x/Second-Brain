@@ -9,6 +9,7 @@ import { TwitterIcon } from "./Icons/TwitterIcon";
 import LabelInput from "./LabelInput";
 import { SuccessIcon } from "./Icons/SuccessIcon";
 import { ErrorIcon } from "./Icons/ErrorIcon";
+import { BACKEND_URL } from "../config";
 
 interface CardInterface {
   id: string;
@@ -45,7 +46,7 @@ export function Cards(props: CardInterface) {
     console.log("Data is" + content);
     try {
       const response = await axios.request({
-        url: "http://localhost:5000/api/v1/content",
+        url: BACKEND_URL + "/api/v1/content",
         method: "DELETE",
         data: {
           contentId: props.id,
