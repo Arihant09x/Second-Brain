@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import LabelInput from "../components/LabelInput";
 import { SuccessIcon } from "../components/Icons/SuccessIcon";
 import { ErrorIcon } from "../components/Icons/ErrorIcon";
-import secure from "../assets/signup.svg";
+import signupImage from "/src/assets/signup.svg";
+
 import { BACKEND_URL } from "../config";
 
 export function Signup() {
@@ -90,7 +91,7 @@ export function Signup() {
       <div
         className="w-1/2 h-screen bg-cover bg-center"
         style={{
-          backgroundImage: `url(${secure})`,
+          backgroundImage: `url(${signupImage})`,
           backgroundSize: "70%",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
