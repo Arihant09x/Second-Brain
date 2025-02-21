@@ -28,7 +28,7 @@ export function UserDashBoard() {
         `${BACKEND_URL}api/v1/brain/${shareLink}`
       );
       console.log("Fetched Content:", response.data.Content);
-      setContent(response.data.Content || []);
+      setContent(response.data.Content);
       setUsername(response.data.Username || "Unknown User");
     } catch (error) {
       console.error("Error fetching content:", error);
@@ -39,34 +39,36 @@ export function UserDashBoard() {
   }
 
   return (
-    <div className="container mt-4 mb-10">
-      <div className="flex items-center gap-2">
-        <BrainICon />
-        <h1 className="text-3xl font-bold">Second Brain</h1>
-      </div>
-
-      <div className="absolute top-4 right-4">
+    <div className="container mx-auto p-4 flex flex-col items-center">
+      {/* Header Section */}
+      <div className="w-full flex justify-between items-center mb-6">
+        <div className="flex items-center gap-2">
+          <BrainICon />
+          <h1 className="text-2xl sm:text-3xl font-bold">Second Brain</h1>
+        </div>
         <Button
           variant="primary"
-          size="md"
+          size="sm"
           onClick={() => navigate("/signin")}
           text="Log In"
           startIcon={<LoginArrowIcon />}
         />
       </div>
 
-      <p className="flex font-semibold ml-12">
-        <span className="font-bold text-md underline">
+      {/* Username Section */}
+      <p className="font-semibold text-lg text-center mb-4">
+        <span className="font-bold underline">
           {loading ? "..." : username}
-        </span>
-        &nbsp;- Share the Brain
+        </span>{" "}
+        - Share the Brain
       </p>
 
-      <div className="flex justify-center items-center min-h-[45vh] mt-6">
+      {/* Cards Section */}
+      <div className="w-full flex justify-center min-h-[45vh]">
         {loading ? (
           <ClipLoader />
         ) : content.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-screen max-w-screen sm:ml-30">
             {content.map(({ _id, type, title, link, subtitle }, index) => (
               <ViewCards
                 key={_id || index}

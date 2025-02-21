@@ -1,1 +1,1 @@
-export const BACKEND_URL = "https://second-brain-backend-wvsa.onrender.com/";
+export const BACKEND_URL = "https://second-brain-backend-jeyo.onrender.com/";

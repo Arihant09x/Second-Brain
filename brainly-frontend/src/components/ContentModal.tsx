@@ -135,7 +135,7 @@ function CreateContent({ open, onClose }: CreateContentProps) {
             <div className="flex justify-center gap-3">
               <Button
                 variant="primary"
-                size="md"
+                size="sm"
                 onClick={addContent}
                 text={"Submit"}
                 loading={isLoading}

@@ -29,7 +29,7 @@ const Feedback = () => {
               <div className="mt-6">
                 <Button
                   variant="primary"
-                  size="md"
+                  size="sm"
                   text="Submit Another Feedback"
                   onClick={() => setSubmitted(false)}
                 />
@@ -68,7 +68,7 @@ const Feedback = () => {
                 />
               </div>
               <div className="flex justify-center mt-5">
-                <Button variant="primary" size="md" text="Submit Feedback" />
+                <Button variant="primary" size="sm" text="Submit Feedback" />
               </div>
             </form>
           )}

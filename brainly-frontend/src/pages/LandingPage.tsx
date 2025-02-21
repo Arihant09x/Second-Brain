@@ -16,22 +16,22 @@ const LandingPage = () => {
 
   return (
     <div className="h-full w-screen bg-gray-100 flex flex-col items-center justify-center">
-      <div className="absolute top-4 left-0 w-full flex items-center justify-between px-6">
-        <div className="flex items-center gap-2">
+      <div className="absolute top-4 left-0 w-full px-6 flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col items-center md:flex-row md:items-center md:gap-2">
           <BrainICon />
           <h1 className="text-3xl font-bold">Second Brain</h1>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 mt-4 md:mt-0 mb-10 md:mb-0">
           <Button
             variant="secondary"
-            size="md"
+            size="sm"
             onClick={() => navigate("/signup")}
             text="Sign Up"
             startIcon={<SignupIcon />}
           />
           <Button
             variant="primary"
-            size="md"
+            size="sm"
             onClick={() => navigate("/signin")}
             text="Log In"
             startIcon={<LoginArrowIcon />}
@@ -40,14 +40,16 @@ const LandingPage = () => {
       </div>
 
       <div className="text-center mt-36">
-        <h2 className="text-4xl font-bold mb-4">Welcome to Second Brain</h2>
+        <h2 className="text-4xl font-bold mb-4 mt-5">
+          Welcome to Second Brain
+        </h2>
         <p className="text-lg mb-8">
           Second Brain is your personal knowledge management system. Capture,
           organize, and share your thoughts and ideas seamlessly.
         </p>
       </div>
 
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
         {[image1, image2, image3, image4, image5, image6].map((img, index) => {
           const titles = [
             "Capture Your Ideas",

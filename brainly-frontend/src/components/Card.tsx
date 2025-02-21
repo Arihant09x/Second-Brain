@@ -44,7 +44,7 @@ export function Cards(props: CardInterface) {
     console.log("Data is" + content);
     try {
       const response = await axios.request({
-        url: BACKEND_URL + "/api/v1/content",
+        url: BACKEND_URL + "api/v1/content",
         method: "DELETE",
         data: {
           contentId: props.id,

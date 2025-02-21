@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 import LabelInput from "../components/LabelInput";
 import { SuccessIcon } from "../components/Icons/SuccessIcon";
 import { ErrorIcon } from "../components/Icons/ErrorIcon";
-import signinImage from "../assets/Signin.svg";
-
+import login from "../assets/Secure-login.svg";
 import { BACKEND_URL } from "../config";
 
 export function Signin() {
@@ -25,12 +24,11 @@ export function Signin() {
   });
 
   const usernameSchema = z.string().min(3).max(10);
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [TrueOrFalse, setValue] = useState(false);
-  const navigate = useNavigate();
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   function handleUsernameChange(e: React.ChangeEvent<HTMLInputElement>) {
     setUsername(e.target.value);
@@ -43,60 +41,68 @@ export function Signin() {
   function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setPassword(value);
+    setValidationChecks({
+      passwordLength: value.length >= 8 && value.length <= 20,
+      uppercase: /[A-Z]/.test(value),
+      lowercase: /[a-z]/.test(value),
+      number: /[0-9]/.test(value),
+      specialChar: /[@$!%*?&#]/.test(value),
+      usernameLength: validationChecks.usernameLength,
+    });
   }
 
   async function signin() {
     try {
       setLoading(true);
       if (!username || !password) {
-        setErrorMessage(" All fields are required!");
+        setErrorMessage("⚠️ Username and Password are required");
         setValue(false);
         setLoading(false);
         return;
       }
-
-      await axios.post(BACKEND_URL + "api/v1/signin", {
+      const response = await axios.post(BACKEND_URL + "api/v1/signin", {
         username,
         password,
       });
-
-      setErrorMessage(" Signed in successfully!");
-      setValue(true);
-      setTimeout(() => navigate("/dashboard"), 2000);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setErrorMessage(
-          error.response?.data?.message || "Sign-in failed. Please try again!"
-        );
+      const jwt = response.data.token;
+      if (jwt) {
+        localStorage.setItem("token", jwt);
+        setErrorMessage(" Sign-In Successful!");
+        setValue(true);
+        setTimeout(() => navigate("/Dashboard"), 2000);
       } else {
-        setErrorMessage("An unexpected error occurred. Please try again!");
+        setErrorMessage(" Sign-in failed. Please try again!");
+        setValue(false);
       }
+    } catch (error) {
+      setErrorMessage(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message || "Sign-in failed."
+          : "An error occurred."
+      );
       setValue(false);
-    } finally {
-      setLoading(false);
     }
   }
 
   return (
-    <div className="h-screen w-screen bg-gray-200 flex flex-col md:flex-row">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-200 p-4 md:p-0">
       <div
-        className="w-full md:w-1/2 h-1/3 md:h-screen bg-cover bg-center"
+        className="w-full md:w-1/2 h-64 md:h-screen bg-cover bg-center"
         style={{
-          backgroundImage: `url(${signinImage})`,
+          backgroundImage: `url(${login})`,
           backgroundSize: "70%",
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
         }}
       ></div>
 
       <div className="w-full md:w-1/2 flex justify-center items-center">
-        <div className="bg-white rounded border w-11/12 md:w-90 h-auto md:h-130 p-6">
+        <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
           <div className="text-center font-bold text-xl">
             <p>Welcome To Second Brain</p>
             <p>Please Sign In</p>
           </div>
 
-          <div className="mx-auto mt-7 max-w-60">
+          <div className="mt-5 md:ml-20">
             <Input
               refence={usernameRef}
               type="text"
@@ -119,36 +125,24 @@ export function Signin() {
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
-              isValid={
-                validationChecks.passwordLength &&
-                validationChecks.uppercase &&
-                validationChecks.lowercase &&
-                validationChecks.number &&
-                validationChecks.specialChar
-              }
+              isValid={Object.values(validationChecks).every(Boolean)}
               className={
                 password.length === 0
                   ? "border-gray-400"
-                  : validationChecks.passwordLength &&
-                      validationChecks.uppercase &&
-                      validationChecks.lowercase &&
-                      validationChecks.number &&
-                      validationChecks.specialChar
+                  : Object.values(validationChecks).every(Boolean)
                     ? "border-green-500"
                     : "border-red-500"
               }
             />
           </div>
 
-          <div className="flex justify-center items-center gap-2 mt-7">
-            <a className="underline hover:cursor-pointer" href="/signup">
-              Don't have an account?
-            </a>
+          <div className="mt-5 flex justify-center md:ml">
             <Button
               variant="primary"
               size="md"
               onClick={signin}
               text="Sign In"
+              fullwidth={true}
               loading={isLoading}
             />
           </div>
@@ -160,6 +154,47 @@ export function Signin() {
               startIcon={TrueOrFalse ? <SuccessIcon /> : <ErrorIcon />}
             />
           )}
+
+          <a
+            className="block text-center mt-3 text-blue-500 hover:underline"
+            href="/signup"
+          >
+            Create an account?
+          </a>
+
+          <ul className="mt-3 text-sm">
+            <h1 className="font-bold">Validation</h1>
+            {[
+              {
+                check: validationChecks.usernameLength,
+                text: "Username (3-10 characters)",
+              },
+              {
+                check: validationChecks.passwordLength,
+                text: "Password (8-20 characters)",
+              },
+              {
+                check: validationChecks.uppercase,
+                text: "At least one uppercase letter",
+              },
+              {
+                check: validationChecks.lowercase,
+                text: "At least one lowercase letter",
+              },
+              { check: validationChecks.number, text: "At least one number" },
+              {
+                check: validationChecks.specialChar,
+                text: "At least one special character (@$!%*?&#)",
+              },
+            ].map((item, index) => (
+              <li
+                key={index}
+                className={item.check ? "text-green-600" : "text-gray-500"}
+              >
+                {item.check ? "✅" : "⚪"} {item.text}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

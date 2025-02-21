@@ -8,7 +8,6 @@ import LabelInput from "../components/LabelInput";
 import { SuccessIcon } from "../components/Icons/SuccessIcon";
 import { ErrorIcon } from "../components/Icons/ErrorIcon";
 import signupImage from "../assets/Signup.svg";
-
 import { BACKEND_URL } from "../config";
 
 export function Signup() {
@@ -50,7 +49,7 @@ export function Signup() {
       lowercase: /[a-z]/.test(value),
       number: /[0-9]/.test(value),
       specialChar: /[@$!%*?&#]/.test(value),
-      usernameLength: validationChecks.usernameLength, // Keep username validation
+      usernameLength: validationChecks.usernameLength,
     });
   }
 
@@ -58,7 +57,7 @@ export function Signup() {
     try {
       setLoading(true);
       if (!name || !username || !password) {
-        setErrorMessage(" All fields are required!");
+        setErrorMessage("All fields are required!");
         setValue(false);
         setLoading(false);
         return;
@@ -69,13 +68,13 @@ export function Signup() {
         password,
       });
 
-      setErrorMessage(" Signed up successfully!");
+      setErrorMessage("Signed up successfully!");
       setValue(true);
       setTimeout(() => navigate("/signin"), 2000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setErrorMessage(
-          error.response?.data?.message || "Sign-in failed. Please try again!"
+          error.response?.data?.message || "Sign-up failed. Please try again!"
         );
       } else {
         setErrorMessage("An unexpected error occurred. Please try again!");
@@ -87,76 +86,42 @@ export function Signup() {
   }
 
   return (
-    <div className="h-screen w-screen bg-gray-200 flex flex-col md:flex-row">
-      <div
-        className="w-full md:w-1/2 h-1/3 md:h-screen bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${signupImage})`,
-          backgroundSize: "70%",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }}
-      ></div>
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-200">
+      <div className="w-full md:w-1/2 flex justify-center items-center p-5">
+        <img src={signupImage} alt="Sign Up" className="max-w-full h-auto" />
+      </div>
 
-      <div className="w-full md:w-1/2 flex justify-center items-center">
-        <div className="bg-white rounded border w-11/12 md:w-90 h-auto md:h-130 p-6">
-          <div className="text-center font-bold text-xl">
+      <div className="w-full md:w-1/2 flex justify-center items-center p-5">
+        <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-md">
+          <div className="text-center font-bold text-xl mb-4">
             <p>Welcome To Second Brain</p>
             <p>Please Sign Up</p>
           </div>
 
-          <div className="mx-auto mt-7 max-w-60">
+          <div className="space-y-1 -ml-3 md:ml-20">
             <Input
               placeholder="Name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-
             <Input
               refence={usernameRef}
               type="text"
               placeholder="Username"
               value={username}
               onChange={handleUsernameChange}
-              isValid={validationChecks.usernameLength}
-              className={
-                username.length === 0
-                  ? "border-gray-400"
-                  : validationChecks.usernameLength
-                    ? "border-green-500"
-                    : "border-red-500"
-              }
             />
-
             <Input
               refence={passwordRef}
               type="password"
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
-              isValid={
-                validationChecks.passwordLength &&
-                validationChecks.uppercase &&
-                validationChecks.lowercase &&
-                validationChecks.number &&
-                validationChecks.specialChar
-              }
-              className={
-                password.length === 0
-                  ? "border-gray-400"
-                  : validationChecks.passwordLength &&
-                      validationChecks.uppercase &&
-                      validationChecks.lowercase &&
-                      validationChecks.number &&
-                      validationChecks.specialChar
-                    ? "border-green-500"
-                    : "border-red-500"
-              }
             />
           </div>
 
-          <div className="flex justify-center items-center gap-2 mt-7">
+          <div className="flex justify-center items-center gap-2 mt-5">
             <a className="underline hover:cursor-pointer" href="/signin">
               Already have an account?
             </a>
@@ -177,7 +142,7 @@ export function Signup() {
             />
           )}
 
-          <h1 className="text-sm font-bold">Validation</h1>
+          <h1 className="text-sm font-bold mt-5">Validation</h1>
           <ul className="mt-3 text-sm">
             <li
               className={

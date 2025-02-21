@@ -29,7 +29,7 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
       );
 
       if (response.data.link) {
-        const shareLink = `https://second-brain-frontend-nwov.onrender.com/${response.data.link}`;
+        const shareLink = `https://second-brain-frontend-nwov.onrender.com/sharebrain/${response.data.link}`;
         setShareMessage(shareLink);
         copyToClipboard(shareLink);
       } else {
@@ -96,7 +96,7 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
           <div className="flex justify-center items-center mt-5">
             <Button
               variant="primary"
-              size="md"
+              size="sm"
               onClick={shareBrain}
               fullwidth
               text="Share Brain"

@@ -24,7 +24,7 @@ const PageNotFound = () => {
         <div className="flex justify-center items-center mt-4">
           <Button
             variant="primary"
-            size="md"
+            size="sm"
             onClick={() => navigate("/")}
             text="Return to Home"
           />

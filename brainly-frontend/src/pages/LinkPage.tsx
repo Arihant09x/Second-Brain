@@ -106,7 +106,7 @@ const LinkPage = () => {
           <h2 className="text-2xl font-bold mb-6 text-center">
             Add a New Link
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-4 sm:flex ">
             <div>
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -128,7 +128,7 @@ const LinkPage = () => {
           </div>
           <Button
             variant="primary"
-            size="md"
+            size="sm"
             text="Add Link"
             onClick={addLink}
           />
@@ -147,7 +147,7 @@ const LinkPage = () => {
               <ClipLoader />
             </div>
           ) : links.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-25 sm:ml-30">
               {links.map(({ _id, title, url }) => (
                 <div key={_id} className="bg-white p-4 rounded shadow-md">
                   <h3 className="text-xl font-bold mb-3">{title}</h3>

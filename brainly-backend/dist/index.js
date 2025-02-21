@@ -21,7 +21,7 @@ const environment_1 = require("./environment");
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const db_1 = require("./db");
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const cors_1 = __importDefault(require("cors"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const zod_1 = require("zod");
@@ -38,7 +38,11 @@ if (!mongoUri || !JWT_SECRET) {
 }
 // App Setup
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: "http://localhost:5173",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+}));
 app.use(express_1.default.json());
 // Zod Schemas
 const signupSchema = zod_1.z.object({
@@ -75,7 +79,7 @@ app.post("/api/v1/signup", (req, res) => __awaiter(void 0, void 0, void 0, funct
             return;
         }
         else {
-            const hashpassword = yield bcrypt_1.default.hash(password, 5);
+            const hashpassword = yield bcryptjs_1.default.hash(password, 10);
             yield db_1.UserModel.create({ username: username, password: hashpassword });
             res.status(201).json({ msg: "User Created Successfully" });
             return;
@@ -102,7 +106,7 @@ app.post("/api/v1/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
             return;
         }
         else {
-            const isMatcg = yield bcrypt_1.default.compare(password, user.password);
+            const isMatcg = yield bcryptjs_1.default.compare(password, user.password);
             if (isMatcg) {
                 const token = jsonwebtoken_1.default.sign({ id: user._id }, JWT_SECRET);
                 res.status(200).json({ msg: "Login Success", token });

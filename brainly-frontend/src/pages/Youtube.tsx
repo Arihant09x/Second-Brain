@@ -1,5 +1,5 @@
-import { useContent } from "../hooks/useContent";
 import { Sidebar } from "../components/Sidebar";
+import { useContent } from "../hooks/useContent";
 import CreateContent from "../components/ContentModal";
 import { ShareModal } from "../components/ShareModal";
 import Button from "../components/Button";
@@ -9,14 +9,13 @@ import { ClipLoader } from "react-spinners";
 import { Cards } from "../components/Card";
 import { useEffect, useState } from "react";
 
-const Youtube = () => {
+const Twitter = () => {
   const [ContentmodalOpen, setContentModalOpen] = useState(false);
   const [ShareModalopen, setShareModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const { content, refersh } = useContent();
 
   useEffect(() => {
-    // Simulate loading data
     setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -27,9 +26,13 @@ const Youtube = () => {
   };
 
   return (
-    <div>
+    <div className="flex min-h-screen bg-[#f9fbfc]">
+      {/* Sidebar */}
       <Sidebar />
-      <div className="min-h-screen -mt-2 bg-[#f9fbfc]">
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col lg:ml-64 p-4">
+        {/* Modals */}
         <CreateContent
           open={ContentmodalOpen}
           onClose={() => setContentModalOpen(false)}
@@ -38,45 +41,43 @@ const Youtube = () => {
           Shareopen={ShareModalopen}
           ShareonClose={() => setShareModalOpen(false)}
         />
-        <div className="flex justify-end mt-4 mr-4 gap-4">
+
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-2 sm:gap-4">
           <Button
             variant="secondary"
-            size="md"
+            size="sm"
             onClick={() => setShareModalOpen(true)}
             text="Share Brain"
             startIcon={<ShareICon size="md" />}
           />
-          <div
-            onClick={(event) => {
-              event.stopPropagation();
-              setContentModalOpen(true);
-            }}
-          >
-            <Button
-              variant="primary"
-              size="md"
-              onClick={() => {}}
-              text="Add Content"
-              startIcon={<PlusIcon size="md" />}
-            />
-          </div>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => setContentModalOpen(true)}
+            text="Add Content"
+            startIcon={<PlusIcon size="md" />}
+          />
         </div>
 
-        <div className="font-bold text-neutral-800 text-3xl mb-10 ml-110 -mt-10">
+        {/* Header */}
+        <div className="font-bold text-neutral-800 text-lg sm:text-xl md:text-2xl my-4 sm:ml-30 sm:-mt-10 text-center sm:text-left">
           All Notes
         </div>
 
-        <div className="flex flex-wrap gap-4 grid-cols-5 ml-110 ">
+        {/* Cards Section */}
+        <div className=" flex justify-center items-center w-full py-4 sm:py-8 ">
           {loading ? (
             <div className="flex justify-center items-center w-full">
               <ClipLoader />
             </div>
           ) : Array.isArray(content) && content.length > 0 ? (
-            content
-              .filter(({ type }) => type === "youtube")
-              .map(({ _id, type, title, link, subtitle }, index) => (
-                <div key={index} className="relative">
+            <div className="grid sm:flex sm:w-full   gap-4 sm:gap-6 mb-30 sm:ml-30">
+              {content
+                .filter(({ type }) => type === "youtube")
+                .map(({ _id, type, title, link, subtitle }, index) => (
                   <Cards
+                    key={index}
                     id={_id}
                     type={type}
                     title={title}
@@ -84,10 +85,10 @@ const Youtube = () => {
                     subtitle={subtitle}
                     onDelete={handleDelete}
                   />
-                </div>
-              ))
+                ))}
+            </div>
           ) : (
-            <div className="flex justify-center items-center text-center text-gray-500 w-full">
+            <div className="flex justify-center items-center text-gray-500 w-full sm:ml-30">
               No Content Available
             </div>
           )}
@@ -97,4 +98,4 @@ const Youtube = () => {
   );
 };
 
-export default Youtube;
+export default Twitter;
