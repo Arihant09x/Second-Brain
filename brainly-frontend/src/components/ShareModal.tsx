@@ -18,8 +18,6 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
   const { content } = useContent();
   const cardCount = Array.isArray(content) ? content.length : 0;
 
-  console.log("Total cards:", cardCount);
-
   async function shareBrain() {
     try {
       const response = await axios.post(

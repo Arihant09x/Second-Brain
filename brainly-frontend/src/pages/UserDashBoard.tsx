@@ -27,7 +27,7 @@ export function UserDashBoard() {
       const response = await axios.get(
         `${BACKEND_URL}api/v1/brain/${shareLink}`
       );
-      console.log("Fetched Content:", response.data.Content);
+
       setContent(response.data.Content);
       setUsername(response.data.Username || "Unknown User");
     } catch (error) {

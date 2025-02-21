@@ -10,7 +10,6 @@ export function useContent() {
         headers: { Authorization: localStorage.getItem("token") },
       })
       .then((response) => {
-        console.log("API response:", response.data);
         setContent(response.data.content || response.data);
       })
       .catch((error) => console.error("Error fetching content:", error));
