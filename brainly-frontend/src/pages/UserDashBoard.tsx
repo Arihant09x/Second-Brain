@@ -25,52 +25,51 @@ export function UserDashBoard() {
     try {
       setLoading(true);
       const response = await axios.get(
-        BACKEND_URL + `api/v1/brain/${shareLink}`
+        `${BACKEND_URL}api/v1/brain/${shareLink}`
       );
       console.log("Fetched Content:", response.data.Content);
-      setContent(response.data.Content);
-      setUsername(response.data.Username);
+      setContent(response.data.Content || []);
+      setUsername(response.data.Username || "Unknown User");
     } catch (error) {
       console.error("Error fetching content:", error);
+      setContent([]);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="container mt-2 mb-10">
-      <div className="flex items-center gap-2 mt-1">
+    <div className="container mt-4 mb-10">
+      <div className="flex items-center gap-2">
         <BrainICon />
         <h1 className="text-3xl font-bold">Second Brain</h1>
       </div>
+
       <div className="absolute top-4 right-4">
         <Button
           variant="primary"
           size="md"
-          onClick={() => {
-            navigate("/signin");
-          }}
-          text="Login In"
+          onClick={() => navigate("/signin")}
+          text="Log In"
           startIcon={<LoginArrowIcon />}
         />
       </div>
 
       <p className="flex font-semibold ml-12">
-        <p className="font-bold text-md underline">
-          {" "}
-          {loading ? "..." : username || "No username available"}
-        </p>
-        -Share the Brain{" "}
+        <span className="font-bold text-md underline">
+          {loading ? "..." : username}
+        </span>
+        &nbsp;- Share the Brain
       </p>
 
-      <div className="flex justify-center items-center h-[45vh] gap-4">
+      <div className="flex justify-center items-center min-h-[45vh] mt-6">
         {loading ? (
           <ClipLoader />
-        ) : Array.isArray(content) && content.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full ml-35">
+        ) : content.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             {content.map(({ _id, type, title, link, subtitle }, index) => (
               <ViewCards
-                key={index}
+                key={_id || index}
                 id={_id}
                 type={type}
                 title={title}
@@ -80,7 +79,7 @@ export function UserDashBoard() {
             ))}
           </div>
         ) : (
-          <div className="flex justify-center items-center text-center text-gray-500 w-full">
+          <div className="flex justify-center items-center text-gray-500 w-full">
             No Content Available
           </div>
         )}

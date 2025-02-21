@@ -87,9 +87,9 @@ export function Signup() {
   }
 
   return (
-    <div className="h-screen w-screen bg-gray-200 flex">
+    <div className="h-screen w-screen bg-gray-200 flex flex-col md:flex-row">
       <div
-        className="w-1/2 h-screen bg-cover bg-center"
+        className="w-full md:w-1/2 h-1/3 md:h-screen bg-cover bg-center"
         style={{
           backgroundImage: `url(${signupImage})`,
           backgroundSize: "70%",
@@ -98,15 +98,14 @@ export function Signup() {
         }}
       ></div>
 
-      <div className="w-1/2 flex justify-center items-center">
-        <div className="bg-white rounded border w-90 h-130 p-6">
+      <div className="w-full md:w-1/2 flex justify-center items-center">
+        <div className="bg-white rounded border w-11/12 md:w-90 h-auto md:h-130 p-6">
           <div className="text-center font-bold text-xl">
             <p>Welcome To Second Brain</p>
             <p>Please Sign Up</p>
           </div>
 
           <div className="mx-auto mt-7 max-w-60">
-            {/* Name Input */}
             <Input
               placeholder="Name"
               type="text"
@@ -114,7 +113,6 @@ export function Signup() {
               onChange={(e) => setName(e.target.value)}
             />
 
-            {/* Username Input */}
             <Input
               refence={usernameRef}
               type="text"
@@ -131,7 +129,6 @@ export function Signup() {
               }
             />
 
-            {/* Password Input */}
             <Input
               refence={passwordRef}
               type="password"
@@ -159,7 +156,6 @@ export function Signup() {
             />
           </div>
 
-          {/* Signup Button */}
           <div className="flex justify-center items-center gap-2 mt-7">
             <a className="underline hover:cursor-pointer" href="/signin">
               Already have an account?
@@ -173,7 +169,6 @@ export function Signup() {
             />
           </div>
 
-          {/* Error or Success Message */}
           {errorMessage && (
             <LabelInput
               label={errorMessage}
@@ -182,7 +177,6 @@ export function Signup() {
             />
           )}
 
-          {/* Bullet-point Validation */}
           <h1 className="text-sm font-bold">Validation</h1>
           <ul className="mt-3 text-sm">
             <li

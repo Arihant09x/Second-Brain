@@ -35,7 +35,13 @@ if (!mongoUri || !JWT_SECRET) {
 
 // App Setup
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://second-brain-frontend-nwov.onrender.com",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Zod Schemas

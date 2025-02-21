@@ -9,25 +9,24 @@ const Feedback = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
     console.log("Feedback submitted:", { feedback, email });
     setSubmitted(true);
   };
 
   return (
-    <div>
+    <div className="flex flex-col md:flex-row min-h-screen">
       <Sidebar />
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md ml-60">
+      <div className="flex flex-1 items-center justify-center bg-gray-100 p-4 md:p-8">
+        <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md md:max-w-lg lg:max-w-xl">
           <h2 className="text-2xl font-bold mb-6 text-center">
             We value your feedback
           </h2>
           {submitted ? (
-            <div className="text-center flex justify-center items-center ">
-              <p className="text-green-500 text-lg absolute -mt-15">
+            <div className="text-center flex flex-col items-center">
+              <p className="text-green-500 text-lg">
                 Thank you for your feedback!
               </p>
-              <div className="mt-8">
+              <div className="mt-6">
                 <Button
                   variant="primary"
                   size="md"
@@ -37,8 +36,8 @@ const Feedback = () => {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6  ">
-              <div className="mb-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="feedback"
@@ -53,7 +52,7 @@ const Feedback = () => {
                   required
                 ></textarea>
               </div>
-              <div className="mb-4">
+              <div>
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="email"
@@ -68,8 +67,7 @@ const Feedback = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="flex justify-center items-center mt-5">
-                {" "}
+              <div className="flex justify-center mt-5">
                 <Button variant="primary" size="md" text="Submit Feedback" />
               </div>
             </form>

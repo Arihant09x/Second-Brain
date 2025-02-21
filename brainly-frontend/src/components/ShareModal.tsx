@@ -23,18 +23,15 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
   async function shareBrain() {
     try {
       const response = await axios.post(
-        BACKEND_URL + "api/v1/brain/share",
+        `${BACKEND_URL}api/v1/brain/share`,
         { share: true },
         { headers: { Authorization: localStorage.getItem("token") } }
       );
-      console.log("Generated Share Link:", response.data.link);
 
       if (response.data.link) {
-        setShareMessage(response.data.link);
-        handleShareClick(
-          "https://second-brain-frontend-nwov.onrender.com/" +
-            response.data.link
-        ); // Pass the received link
+        const shareLink = `https://second-brain-frontend-nwov.onrender.com/${response.data.link}`;
+        setShareMessage(shareLink);
+        copyToClipboard(shareLink);
       } else {
         setMessage("Failed to generate link.");
       }
@@ -44,26 +41,28 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
     }
   }
 
-  const handleShareClick = (link: string) => {
-    setMessage("Link is copied to clipboard");
-    console.log(shareMessage);
-
-    // Copy message to clipboard
-    navigator.clipboard.writeText(link).then(() => {
-      setCountdown(3); // Start countdown
+  const copyToClipboard = async (link: string) => {
+    try {
+      await navigator.clipboard.writeText(link);
+      setMessage("Link copied to clipboard!");
+      setCountdown(3);
+      console.log(shareMessage);
 
       const interval = setInterval(() => {
         setCountdown((prev) => {
           if (prev === 1) {
             clearInterval(interval);
-            setMessage(""); // Hide message
-            window.open(link, "_blank"); // Redirect
+            setMessage("");
+            window.open(link, "_blank");
             return null;
           }
           return prev ? prev - 1 : null;
         });
       }, 1000);
-    });
+    } catch (err) {
+      console.error("Failed to copy:", err);
+      setMessage("Failed to copy link.");
+    }
   };
 
   return (
@@ -76,20 +75,17 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
       >
         <div className="bg-white opacity-100 p-4 rounded-xl shadow-lg w-96">
           <div className="flex justify-between items-center">
-            <h1 className="font-black font-medium text-xl">
-              Share Your Second Brain
-            </h1>
+            <h1 className="font-black text-xl">Share Your Second Brain</h1>
             <button onClick={ShareonClose} className="p-1">
               <CrossIcon />
             </button>
           </div>
           <p className="mt-2 text-sm text-gray-400 text-center">
-            Share your entire collection of notes, documents, tweets, and videos
-            with others. They'll be able to import your content into their own
-            Second Brain.
+            Share your collection of notes, documents, tweets, and videos with
+            others. They’ll be able to import your content into their own Second
+            Brain.
           </p>
 
-          {/* Messages centered & stacked */}
           {message && (
             <div className="mt-3 p-3 bg-green-100 text-green-700 text-sm rounded-md text-center transition-all animate-fadeIn ease-in-out duration-500">
               <p>{message}</p>
@@ -101,8 +97,8 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
             <Button
               variant="primary"
               size="md"
-              onClick={shareBrain} // Fixed button click handler
-              fullwidth={true}
+              onClick={shareBrain}
+              fullwidth
               text="Share Brain"
               startIcon={<ContentCopyIcon />}
             />

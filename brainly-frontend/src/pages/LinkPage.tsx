@@ -31,7 +31,6 @@ const LinkPage = () => {
         },
       });
       setLinks(response.data);
-      console.log("backend is" + response.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching links:", error);
@@ -92,9 +91,9 @@ const LinkPage = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row min-h-screen">
       <Sidebar />
-      <div className="min-h-screen flex-1 bg-[#f9fbfc] p-8 flex flex-col items-center">
+      <div className="flex flex-1 flex-col items-center bg-[#f9fbfc] p-4 md:p-8">
         <CreateContent
           open={ContentmodalOpen}
           onClose={() => setContentModalOpen(false)}
@@ -103,12 +102,12 @@ const LinkPage = () => {
           Shareopen={ShareModalopen}
           ShareonClose={() => setShareModalOpen(false)}
         />
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl h-72 mb-8 ml-50 ">
+        <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md md:max-w-lg lg:max-w-xl mb-8">
           <h2 className="text-2xl font-bold mb-6 text-center">
             Add a New Link
           </h2>
-          <div className="flex">
-            <div className="mb-4 ">
+          <div className="space-y-4">
+            <div>
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="title"
@@ -117,7 +116,7 @@ const LinkPage = () => {
               </label>
               <Input refence={titleRef} type="text" placeholder="Title" />
             </div>
-            <div className="mb-4">
+            <div>
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="url"
@@ -141,19 +140,16 @@ const LinkPage = () => {
           )}
         </div>
 
-        <div className="w-screen max-w-5xl ml-50">
+        <div className="w-full max-w-5xl">
           <h2 className="text-2xl font-bold mb-6 text-center">Your Links</h2>
           {loading ? (
             <div className="flex justify-center items-center w-full">
               <ClipLoader />
             </div>
           ) : links.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ml-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {links.map(({ _id, title, url }) => (
-                <div
-                  key={_id}
-                  className="relative bg-white p-4 rounded shadow-md"
-                >
+                <div key={_id} className="bg-white p-4 rounded shadow-md">
                   <h3 className="text-xl font-bold mb-3">{title}</h3>
                   <a
                     href={url}

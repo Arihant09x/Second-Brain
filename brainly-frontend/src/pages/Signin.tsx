@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { z } from "zod";
-
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import axios from "axios";
@@ -8,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import LabelInput from "../components/LabelInput";
 import { SuccessIcon } from "../components/Icons/SuccessIcon";
 import { ErrorIcon } from "../components/Icons/ErrorIcon";
-import login from "../assets/Secure-login.svg";
+import signinImage from "../assets/Signin.svg";
+
 import { BACKEND_URL } from "../config";
 
 export function Signin() {
@@ -28,9 +28,9 @@ export function Signin() {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [TrueOrFalse, setValue] = useState(false);
+  const navigate = useNavigate();
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
 
   function handleUsernameChange(e: React.ChangeEvent<HTMLInputElement>) {
     setUsername(e.target.value);
@@ -43,41 +43,26 @@ export function Signin() {
   function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setPassword(value);
-    setValidationChecks({
-      passwordLength: value.length >= 8 && value.length <= 20,
-      uppercase: /[A-Z]/.test(value),
-      lowercase: /[a-z]/.test(value),
-      number: /[0-9]/.test(value),
-      specialChar: /[@$!%*?&#]/.test(value),
-      usernameLength: validationChecks.usernameLength, // Keep username validation
-    });
   }
 
   async function signin() {
     try {
       setLoading(true);
       if (!username || !password) {
-        setErrorMessage("⚠️ Username and Password are required");
+        setErrorMessage(" All fields are required!");
         setValue(false);
         setLoading(false);
         return;
       }
 
-      const response = await axios.post(BACKEND_URL + "api/v1/signin", {
+      await axios.post(BACKEND_URL + "api/v1/signin", {
         username,
         password,
       });
 
-      const jwt = response.data.token;
-      if (jwt) {
-        localStorage.setItem("token", jwt);
-        setErrorMessage(" Sign-In Successful!");
-        setValue(true);
-        setTimeout(() => navigate("/Dashboard"), 2000);
-      } else {
-        setErrorMessage(" Sign-in failed. Please try again!");
-        setValue(false);
-      }
+      setErrorMessage(" Signed in successfully!");
+      setValue(true);
+      setTimeout(() => navigate("/dashboard"), 2000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setErrorMessage(
@@ -87,30 +72,31 @@ export function Signin() {
         setErrorMessage("An unexpected error occurred. Please try again!");
       }
       setValue(false);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div className="h-screen w-screen bg-gray-200 flex">
+    <div className="h-screen w-screen bg-gray-200 flex flex-col md:flex-row">
       <div
-        className="w-1/2 h-screen bg-cover bg-center"
+        className="w-full md:w-1/2 h-1/3 md:h-screen bg-cover bg-center"
         style={{
-          backgroundImage: `url(${login})`,
+          backgroundImage: `url(${signinImage})`,
           backgroundSize: "70%",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
         }}
       ></div>
 
-      <div className="w-1/2 flex justify-center items-center">
-        <div className="bg-white rounded border w-90 h-130 p-6">
+      <div className="w-full md:w-1/2 flex justify-center items-center">
+        <div className="bg-white rounded border w-11/12 md:w-90 h-auto md:h-130 p-6">
           <div className="text-center font-bold text-xl">
             <p>Welcome To Second Brain</p>
             <p>Please Sign In</p>
           </div>
 
           <div className="mx-auto mt-7 max-w-60">
-            {/* Username Input */}
             <Input
               refence={usernameRef}
               type="text"
@@ -127,7 +113,6 @@ export function Signin() {
               }
             />
 
-            {/* Password Input */}
             <Input
               refence={passwordRef}
               type="password"
@@ -155,19 +140,19 @@ export function Signin() {
             />
           </div>
 
-          {/* Sign In Button */}
           <div className="flex justify-center items-center gap-2 mt-7">
+            <a className="underline hover:cursor-pointer" href="/signup">
+              Don't have an account?
+            </a>
             <Button
               variant="primary"
               size="md"
               onClick={signin}
               text="Sign In"
-              fullwidth={true}
               loading={isLoading}
             />
           </div>
 
-          {/* Error or Success Message */}
           {errorMessage && (
             <LabelInput
               label={errorMessage}
@@ -175,72 +160,6 @@ export function Signin() {
               startIcon={TrueOrFalse ? <SuccessIcon /> : <ErrorIcon />}
             />
           )}
-
-          {/* Signup Link */}
-          <a
-            className="flex justify-center items-center mt-3 hover:underline"
-            href="/signup"
-          >
-            Create an account?
-          </a>
-
-          {/* Bullet-point Validation */}
-          <ul className="mt-3 text-sm">
-            <h1 className="font-bold text-sm">Validation</h1>
-            <li
-              className={
-                validationChecks.usernameLength
-                  ? "text-green-600"
-                  : "text-gray-500"
-              }
-            >
-              {validationChecks.usernameLength ? "✅" : "⚪"} Username (3-10
-              characters)
-            </li>
-            <li
-              className={
-                validationChecks.passwordLength
-                  ? "text-green-600"
-                  : "text-gray-500"
-              }
-            >
-              {validationChecks.passwordLength ? "✅" : "⚪"} Password (8-20
-              characters)
-            </li>
-            <li
-              className={
-                validationChecks.uppercase ? "text-green-600" : "text-gray-500"
-              }
-            >
-              {validationChecks.uppercase ? "✅" : "⚪"} At least one uppercase
-              letter
-            </li>
-            <li
-              className={
-                validationChecks.lowercase ? "text-green-600" : "text-gray-500"
-              }
-            >
-              {validationChecks.lowercase ? "✅" : "⚪"} At least one lowercase
-              letter
-            </li>
-            <li
-              className={
-                validationChecks.number ? "text-green-600" : "text-gray-500"
-              }
-            >
-              {validationChecks.number ? "✅" : "⚪"} At least one number
-            </li>
-            <li
-              className={
-                validationChecks.specialChar
-                  ? "text-green-600"
-                  : "text-gray-500"
-              }
-            >
-              {validationChecks.specialChar ? "✅" : "⚪"} At least one special
-              character (@$!%*?&#)
-            </li>
-          </ul>
         </div>
       </div>
     </div>
