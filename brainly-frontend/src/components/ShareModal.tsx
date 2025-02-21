@@ -32,7 +32,8 @@ export function ShareModal({ Shareopen, ShareonClose }: ShareType) {
       if (response.data.link) {
         setShareMessage(response.data.link);
         handleShareClick(
-          "https://second-brain-frontend-ahrl.onrender.com" + response.data.link
+          "https://second-brain-frontend-nwov.onrender.com/" +
+            response.data.link
         ); // Pass the received link
       } else {
         setMessage("Failed to generate link.");
