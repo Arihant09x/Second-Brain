@@ -52,7 +52,7 @@ The Second Brain App is a TypeScript-based application designed to help users or
 
 ## Usage
 
-1. Access the application at `https://second-brain-frontend-nwov.onrender.com`
+1. Access the application at https://second-brain-frontend-nwov.onrender.com
 2. Use the dashboard to create and organize your knowledge
 3. Explore different features through the intuitive interface
 
