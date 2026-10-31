@@ -16,13 +16,14 @@ export function Input({
   value,
   onChange,
   isValid = null,
+  className,
 }: InputOnchange) {
   return (
     <div>
       <input
         placeholder={placeholder}
         type={type}
-        className={`px-4 py-2 border-2 rounded m-2 ${
+        className={`w-full px-4 py-2 border-2 rounded m-2 ${className} ${
           isValid === null
             ? "border-gray-300"
             : isValid

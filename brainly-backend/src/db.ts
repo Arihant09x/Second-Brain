@@ -5,7 +5,8 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 // User Schema
 const UserSchema = new Schema({
   username: { type: String, required: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
+  googleId: { type: String, required: false, unique: true, sparse: true },
 });
 
 // Tags Schema
@@ -51,9 +52,34 @@ const LinkSchema = new Schema({
   },
 });
 
+// AI Conversation Schema
+const AIConversationSchema = new Schema({
+  question: { type: String, required: true },
+  answer: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now },
+  UserId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+});
+
+// Document Schema
+const DocumentSchema = new Schema({
+  title: { type: String, required: true },
+  fileName: { type: String, required: true },
+  fileType: { type: String, required: true },
+  fileSize: { type: Number, required: true },
+  filePath: { type: String, required: true },
+  description: { type: String, default: "" },
+  uploadDate: { type: Date, default: Date.now },
+  UserId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+});
+
 // Export models with minimal typing
 export const UserModel = mongoose.model("User", UserSchema);
 export const TagsModel = mongoose.model("Tags", TagsSchema);
 export const ContentModel = mongoose.model("Content", ContentSchema);
 export const LinksModel = mongoose.model("notes", LinksSchema);
 export const LinkModel = mongoose.model("Link", LinkSchema);
+export const AIConversationModel = mongoose.model(
+  "AIConversation",
+  AIConversationSchema
+);
+export const DocumentModel = mongoose.model("Document", DocumentSchema);

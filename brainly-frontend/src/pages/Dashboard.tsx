@@ -30,9 +30,9 @@ function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen w-full">
+    <div className="flex min-h-screen bg-white">
       <Sidebar />
-      <div className="flex-1 bg-[#f9fbfc] p-2 sm:p-4 w-full">
+      <div className="flex-1 flex flex-col lg:ml-65 lg:w-60  sm:p-6 pb-20 lg:pb-6">
         <CreateContent
           open={contentModalOpen}
           onClose={() => setContentModalOpen(false)}
@@ -42,7 +42,7 @@ function Dashboard() {
           ShareonClose={() => setShareModalOpen(false)}
         />
 
-        <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-2 sm:gap-4 mt-2 ">
+        <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-2 sm:gap-4 mb-6">
           <Button
             variant="secondary"
             size="sm"
@@ -59,31 +59,37 @@ function Dashboard() {
           />
         </div>
 
-        <div className="font-bold text-neutral-800 text-lg sm:text-xl md:text-2xl mb-4 sm:mb-6  sm:-mt-10 text-center sm:text-left sm:ml-90 ">
+        <div className="font-bold text-gray-900 text-lg sm:text-xl md:text-2xl mb-6 text-center sm:text-left">
           All Notes
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center w-full py-4 sm:py-8">
-            <ClipLoader />
+          <div className="flex justify-center items-center w-full py-12">
+            <ClipLoader color="#3B82F6" />
           </div>
         ) : Array.isArray(content) && content.length > 0 ? (
-          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 mb-50 sm:ml-90">
+          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
             {content.map(({ _id, type, title, link, subtitle }, index) => (
-              <Cards
+              <div
                 key={_id || index}
-                id={_id}
-                type={type}
-                title={title}
-                link={link}
-                subtitle={subtitle}
-                onDelete={handleDelete}
-              />
+                className="break-inside-avoid mb-4 sm:mb-6"
+              >
+                <Cards
+                  id={_id}
+                  type={type}
+                  title={title}
+                  link={link}
+                  subtitle={subtitle}
+                  onDelete={handleDelete}
+                />
+              </div>
             ))}
           </div>
         ) : (
-          <div className="flex justify-center items-center text-gray-500 w-full h-32 sm:h-40 text-center px-2">
-            No Content Available
+          <div className="flex flex-col justify-center items-center text-gray-500 w-full py-12">
+            <div className="text-6xl mb-4">📝</div>
+            <h3 className="text-xl font-semibold mb-2">No content yet</h3>
+            <p className="text-sm">Add your first note to get started</p>
           </div>
         )}
       </div>

@@ -5,8 +5,8 @@ import Button from "../components/Button";
 import { ViewCards } from "../components/ViewCard";
 import { ClipLoader } from "react-spinners";
 import { BrainICon } from "../components/Icons/BrainIcon";
-import { LoginArrowIcon } from "../components/Icons/LoginArrow";
 import { BACKEND_URL } from "../config";
+import { UserPlus } from "lucide-react";
 
 export function UserDashBoard() {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ export function UserDashBoard() {
           size="sm"
           onClick={() => navigate("/signin")}
           text="Log In"
-          startIcon={<LoginArrowIcon />}
+          startIcon={<UserPlus size={20} />}
         />
       </div>
 
@@ -68,16 +68,17 @@ export function UserDashBoard() {
         {loading ? (
           <ClipLoader />
         ) : content.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-screen max-w-screen sm:ml-30">
+          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 w-full max-w-screen  space-y-6">
             {content.map(({ _id, type, title, link, subtitle }, index) => (
-              <ViewCards
-                key={_id || index}
-                id={_id}
-                type={type}
-                title={title}
-                link={link}
-                subtitle={subtitle}
-              />
+              <div key={_id || index} className="break-inside-avoid mb-6">
+                <ViewCards
+                  id={_id}
+                  type={type}
+                  title={title}
+                  link={link}
+                  subtitle={subtitle}
+                />
+              </div>
             ))}
           </div>
         ) : (

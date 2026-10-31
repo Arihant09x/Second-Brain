@@ -3,30 +3,50 @@ import Button from "./Button";
 import { Input } from "./Input";
 import { YoutubeICon } from "./Icons/YoutubeIcon";
 import { TwitterIcon } from "./Icons/TwitterIcon";
+import { LinkedinIcon } from "./Icons/linkedinIcon";
+import { RedditsIcon } from "./Icons/redditsIcon";
 import axios from "axios";
-import LabelInput from "./LabelInput";
-import { SuccessIcon } from "./Icons/SuccessIcon";
-import { ErrorIcon } from "./Icons/ErrorIcon";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { BACKEND_URL } from "../config";
+import { useSnackbar } from "notistack";
 
 interface CreateContentProps {
   open: boolean;
   onClose: () => void;
 }
+
 enum ContentType {
   Youtube = "youtube",
-  Twitter = "Twitter",
+  Twitter = "twitter",
+  Linkedin = "linkedin",
+  Reddits = "reddits",
 }
+
+const contentOptions = [
+  { id: ContentType.Youtube, text: "YouTube", icon: <YoutubeICon /> },
+  { id: ContentType.Twitter, text: "Twitter", icon: <TwitterIcon /> },
+  { id: ContentType.Linkedin, text: "LinkedIn", icon: <LinkedinIcon /> },
+  { id: ContentType.Reddits, text: "Reddit", icon: <RedditsIcon /> },
+];
 
 function CreateContent({ open, onClose }: CreateContentProps) {
   const [type, setType] = useState(ContentType.Youtube);
   const [isLoading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [TrueOrFalse, setValue] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null);
   const subtitleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (!open) {
+      setTimeout(() => {
+        setIsSuccess(false);
+        setLoading(false);
+        setType(ContentType.Youtube);
+      }, 300);
+    }
+  }, [open]);
 
   async function addContent() {
     setLoading(true);
@@ -35,8 +55,15 @@ function CreateContent({ open, onClose }: CreateContentProps) {
     const link = linkRef.current?.value;
 
     if (!title || !subtitle || !link) {
-      setErrorMessage("Please fill in all fields");
-      setValue(false);
+      enqueueSnackbar("Please fill in all fields", {
+        variant: "info",
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+      setIsSuccess(false);
       setLoading(false);
       return;
     }
@@ -44,114 +71,165 @@ function CreateContent({ open, onClose }: CreateContentProps) {
     try {
       const response = await axios.post(
         BACKEND_URL + "api/v1/content",
-        {
-          title,
-          subtitle,
-          link,
-          type,
-        },
-        {
-          headers: {
-            Authorization: ` ${localStorage.getItem("token")}`,
-          },
-        }
+        { title, subtitle, link, type },
+        { headers: { Authorization: ` ${localStorage.getItem("token")}` } }
       );
 
-      if (
-        response.status === 200 ||
-        response.status === 201 ||
-        response.status === 202
-      ) {
-        setErrorMessage("Content added successfully");
-        setValue(true);
-        setLoading(false);
+      if ([200, 201, 202].includes(response.status)) {
+        enqueueSnackbar("Content added successfully!", {
+          variant: "success",
+          autoHideDuration: 2000,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+        setIsSuccess(true);
         setTimeout(() => {
           onClose();
-        }, 2000);
-        window.location.reload();
+          window.location.reload();
+        }, 1500);
       } else {
-        setErrorMessage("Failed to add content");
-        setValue(false);
-        setLoading(false);
+        enqueueSnackbar("Failed to add content. Please try again.", {
+          variant: "error",
+          autoHideDuration: 2000,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+        setIsSuccess(false);
       }
     } catch (error) {
       console.error("Error adding content:", error);
-      setErrorMessage("An error occurred while adding content");
-      setValue(false);
+      enqueueSnackbar("An error occurred. Please check the console.", {
+        variant: "error",
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+      setIsSuccess(false);
+    } finally {
       setLoading(false);
     }
   }
 
   return (
-    <>
+    // --- SOLUTION: MODIFIED BACKDROP FOR BLUR EFFECT ---
+    // Changed 'bg-black bg-opacity-50' to 'bg-gray-900/30' for a softer, less black overlay
+    // Added 'backdrop-blur-sm' to create the frosted glass effect
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/30 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${
+        open ? "opacity-100" : "opacity-0"
+      }`}
+      style={{ pointerEvents: open ? "auto" : "none" }}
+    >
+      {/* --- SOLUTION: MODIFIED MODAL FOR BETTER ANIMATION --- */}
+      {/* Combines opacity, scale, and translate for a smooth "drop-down" effect */}
       <div
-        className={`w-screen h-screen inset-0 bg-slate-300/30 fixed top-0 left-0 backdrop-blur-xs flex justify-center items-center transition-all duration-300 ease-in-out ${
-          open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"
+        className={`bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 ease-in-out ${
+          open
+            ? "translate-y-0 opacity-100 scale-100"
+            : "-translate-y-10 opacity-0 scale-95"
         }`}
-        style={{ pointerEvents: open ? "auto" : "none" }}
       >
-        <div className="flex flex-col justify-center">
-          <span className="bg-white opacity-100 p-4 rounded w-full shadow-lg">
-            <div onClick={onClose} className="flex justify-end -mr-4 -mt-3">
-              <CrossIcon />
+        {/* Modal Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-800">Add New Content</h2>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+            aria-label="Close modal"
+          >
+            <CrossIcon />
+          </button>
+        </div>
+
+        {/* Modal Body */}
+        <div className="p-6">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Title
+              </label>
+              <Input
+                refence={titleRef}
+                className="w-fit"
+                type={"text"}
+                placeholder={"e.g., My Awesome Video"}
+              />
             </div>
             <div>
-              <label className="ml-1">Title</label>
-              <Input refence={titleRef} type={"text"} placeholder={"Title"} />
-              <label className="ml-1">Subtitle</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Subtitle
+              </label>
               <Input
                 refence={subtitleRef}
                 type={"text"}
-                placeholder={"Subtitle"}
+                placeholder={"A short description"}
               />
-              <label className="ml-1">Link</label>
-              <Input refence={linkRef} type={"text"} placeholder={"Link"} />
             </div>
-            <div className="mb-5 mt-2">
-              <h1>Types</h1>
-              <div className="flex justify-center items-center mt-5 gap-4">
-                <Button
-                  text="Youtube"
-                  startIcon={<YoutubeICon />}
-                  variant={
-                    type === ContentType.Youtube ? "primary" : "secondary"
-                  }
-                  onClick={() => {
-                    setType(ContentType.Youtube);
-                  }}
-                ></Button>
-                <Button
-                  text="Twitter"
-                  startIcon={<TwitterIcon />}
-                  variant={
-                    type === ContentType.Twitter ? "primary" : "secondary"
-                  }
-                  onClick={() => {
-                    setType(ContentType.Twitter);
-                  }}
-                ></Button>
-              </div>
-            </div>
-            <div className="flex justify-center gap-3">
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={addContent}
-                text={"Submit"}
-                loading={isLoading}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Link
+              </label>
+              <Input
+                refence={linkRef}
+                type={"text"}
+                placeholder={"https://... URL of the content"}
               />
-              {errorMessage && (
-                <LabelInput
-                  label={errorMessage}
-                  success={TrueOrFalse}
-                  startIcon={TrueOrFalse ? <SuccessIcon /> : <ErrorIcon />}
-                />
-              )}
             </div>
-          </span>
+          </div>
+
+          {/* Modern Type Selection */}
+          <div className="my-6">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Content Type
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {contentOptions.map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => setType(option.id)}
+                  className={`flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all duration-200 hover:cursor-pointer ${
+                    type === option.id
+                      ? "border-blue-500 bg-blue-50 shadow-sm"
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }`}
+                >
+                  <div
+                    className={`text-2xl ${type === option.id ? "text-blue-600" : "text-gray-500"}`}
+                  >
+                    {option.icon}
+                  </div>
+                  <span
+                    className={`mt-2 text-sm font-semibold ${type === option.id ? "text-blue-800" : "text-gray-700"}`}
+                  >
+                    {option.text}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Modal Footer */}
+          <div className="pt-2">
+            <Button
+              variant="primary"
+              className="hover:cursor-pointer"
+              size="md"
+              onClick={addContent}
+              text={"Add Content"}
+              loading={isLoading}
+              fullwidth
+            />
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
+
 export default CreateContent;

@@ -4,10 +4,12 @@ import { ReactElement } from "react";
 export interface ButtonProps {
   variant: "primary" | "secondary";
   size?: "sm" | "md" | "lg";
+  type?: "button" | "submit" | "reset";
   text: string;
+  className?: string;
   startIcon?: ReactElement;
   endIcon?: ReactElement;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   fullwidth?: boolean;
   loading?: boolean;
 }
@@ -26,7 +28,9 @@ const Defaultsize = {
 const Button = ({
   variant,
   size = "md",
+  type = "button",
   text,
+  className,
   startIcon,
   endIcon,
   onClick,
@@ -35,13 +39,15 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
+      type={type}
       className={`flex items-center justify-center gap-2 
         ${variantStyle[variant]} 
         ${Defaultsize[size]} 
         ${fullwidth ? "w-full" : "w-auto"} 
         rounded-md font-medium transition-all duration-200 
-        ease-out hover:scale-105 hover:shadow-md 
-        disabled:opacity-50 disabled:cursor-not-allowed`}
+        ease-out hover:scale-105
+        5 cursor-pointer hover:shadow-md 
+        disabled:opacity-50 ${className}`}
       onClick={onClick}
       disabled={loading}
     >
